@@ -36,6 +36,7 @@ export class TicTacToeSpawner extends Component {
 
     public SpwanTicTacToeBoard(boardSize : Vec2)
     {
+        //this.UpdateTicTacToeButton(boardSize);
         //Destroy All button
         this.ClearBoard();
 
@@ -45,6 +46,42 @@ export class TicTacToeSpawner extends Component {
         //Spawn New Button
         var spawnAmount = boardSize.x * boardSize.y;
         this.GenerateBoard(spawnAmount);
+    }
+
+    private UpdateTicTacToeButton(newBoardSize : Vec2){
+        //Check how much need to be add or need to be remove (Exist - target ,-neg = need to add, +pos = need to remove)
+        var existingButtonCount = this.referenceManagerInstance.TicTacToeManagerInstance.BoardSize.x * this.referenceManagerInstance.TicTacToeManagerInstance.BoardSize.y;
+        var newBoardButtonCount = newBoardSize.x* newBoardSize.y;
+        var updateButtonCount = existingButtonCount - newBoardButtonCount;
+
+        var ticTacToeButtons = this.referenceManagerInstance.TicTacToeButtonInstances;
+        if(updateButtonCount > 0)
+        {
+            console.log("Need to remove Button");
+            for(let i = ticTacToeButtons.length - 1; i <= 0; i--){
+                var buttonId = ticTacToeButtons[i].buttonId;
+                console.log("Removing Button : " + buttonId + " from list");
+                //this.referenceManagerInstance.TicTacToeButtonInstances.splice(i,1);
+            }
+        }
+        else if(updateButtonCount < 0)
+        {
+            console.log("Need to add button");
+            for(let i = ticTacToeButtons.length; i < newBoardButtonCount; i++){
+                
+                console.log("Add Button with id : " + (i-1));
+            }
+        }
+        else{
+            console.log("Same Board Size, no need update tictactoe button");
+        }
+
+        //Sorting ned ?
+
+        //Make sure the only remove from last element of the array to ensure the button index is in ascending
+
+        //Make sure the added button is match with the last existing button
+
     }
 
     private ClearBoard(){
@@ -71,8 +108,6 @@ export class TicTacToeSpawner extends Component {
        // console.info("TicTacToe list counnt after clear : " + this.referenceManagerInstance.TicTacToeButtonInstances.length);
 
     }
-    
-
     
     private AdjustGridLayout(boardSize : Vec2){
         //Adjust Layout
