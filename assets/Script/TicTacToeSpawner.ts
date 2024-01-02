@@ -5,7 +5,6 @@ const { ccclass, property } = _decorator;
 
 @ccclass('TicTacToeSpawner')
 export class TicTacToeSpawner extends Component {
-    public static Instance : TicTacToeSpawner;
     private referenceManagerInstance : ReferenceManager = null;
 
     @property(Node)
@@ -22,13 +21,13 @@ export class TicTacToeSpawner extends Component {
     }
 
     protected onLoad(): void {
-        if(TicTacToeSpawner.Instance !=null && TicTacToeSpawner.Instance != this)
-        {
-            this.node.destroy()
-        }else
-        {
-            TicTacToeSpawner.Instance = this;
-        }
+        // if(TicTacToeSpawner.Instance !=null && TicTacToeSpawner.Instance != this)
+        // {
+        //     this.node.destroy()
+        // }else
+        // {
+        //     TicTacToeSpawner.Instance = this;
+        // }
     }
 
     start() {
@@ -45,36 +44,35 @@ export class TicTacToeSpawner extends Component {
 
         //Spawn New Button
         var spawnAmount = boardSize.x * boardSize.y;
-        this.InstantiateButtonNode(spawnAmount);
-
+        this.GenerateBoard(spawnAmount);
     }
 
     private ClearBoard(){
         if(this.parentNode.children.length == 0)
         {
-            console.error("Clear Board while the board is empty this should not be happen");
+            console.error("Clear Board while the board is empty this should not be happen, except the first time reset");
             return;
         }
 
+        //console.info("TicTacToe list count before clear : " + this.referenceManagerInstance.TicTacToeButtonInstances.length);
+
         //Get Buttons scripts from the reference manager, iterate the array and call the slice one by one button script
         var ticTacToeButtons = this.referenceManagerInstance.TicTacToeButtonInstances;
-        for(let i = 0;i < ticTacToeButtons.length; i++)
+
+        for(let i = ticTacToeButtons.length - 1; i >= 0; i--)
         {
+            //console.log("Current Index is : " + i);
             var tempTicTacToeButton = this.referenceManagerInstance.TicTacToeButtonInstances[i];
-            this.referenceManagerInstance.TicTacToeButtonInstances.splice(i, 1)
+            //this.referenceManagerInstance.RemoveTicTacToeButtonInstance(tempTicTacToeButton);
+            this.referenceManagerInstance.TicTacToeButtonInstances.splice(i,1);
             tempTicTacToeButton.DestroyButton();
         }
 
-        //Clear all Buttons
-        // if(this.parentNode.children.length == 0)
-        // {
-        //     return;
-        // }
-        // else{
-        //     this.parentNode.destroyAllChildren();
-        // }
+       // console.info("TicTacToe list counnt after clear : " + this.referenceManagerInstance.TicTacToeButtonInstances.length);
 
     }
+    
+
     
     private AdjustGridLayout(boardSize : Vec2){
         //Adjust Layout
@@ -89,11 +87,12 @@ export class TicTacToeSpawner extends Component {
     }
     
     //Instantiate can be done insde Button Class with static function.
-    private InstantiateButtonNode(spawnAmount : number){
+    private GenerateBoard(spawnAmount : number){
         for(let i =0;i< spawnAmount; i++){
             //Spwan prefabs
-            var tempTicTacToebutton = instantiate(this.ticTaeToePrefab).getComponent(TicTacToeButton);
-            tempTicTacToebutton.InitailizeButton(this.parentNode,i);
+            var spawnedTicTacToeButton = instantiate(this.ticTaeToePrefab).getComponent(TicTacToeButton);
+            spawnedTicTacToeButton.Init(this.referenceManagerInstance);
+            spawnedTicTacToeButton.InitailizeParentNode(this.parentNode,i);
         }
     }
 }

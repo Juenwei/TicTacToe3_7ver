@@ -1,6 +1,6 @@
 import { _decorator, Button, Color, Component, Node, RichText, EventTarget } from 'cc';
 import { TicTacToeButton } from './TicTacToeButton';
-import { WinSingleUI } from './WinSingleUI';
+import { WinSplashSingleUI } from './WinSplashSingleUI';
 import { ReferenceManager } from './ReferenceManager';
 
 const { ccclass, property } = _decorator;
@@ -18,8 +18,8 @@ export class TicTacToeMenu extends Component {
     @property(Button)
     surrenderButton : Button;
 
-    @property(WinSingleUI)
-    winSingleUI: WinSingleUI;
+    @property(WinSplashSingleUI)
+    winSingleUI: WinSplashSingleUI;
 
     @property
     disableColor: Color;

@@ -6,6 +6,7 @@ import { BoardSettingMenu } from './BoardSettingMenu';
 import { TicTacToeMenu } from './TicTacToeMenu';
 import { TicTacToeButton } from './TicTacToeButton';
 import { TicTacToeManager } from './TicTacToeManager';
+import { TicTacToeSpawner } from './TicTacToeSpawner';
 
 @ccclass('ReferenceManager')
 export class ReferenceManager extends Component {
@@ -20,7 +21,11 @@ export class ReferenceManager extends Component {
 
     private ticTacToeButtonInstances : Array<TicTacToeButton> = new Array<TicTacToeButton>();
 
+    @property(TicTacToeManager)
     private ticTacToeManagerInstance : TicTacToeManager;
+
+    @property(TicTacToeSpawner)
+    private ticTacToeSpawnerInstance : TicTacToeSpawner;
 
     // Function
     protected onLoad(): void {
@@ -37,8 +42,9 @@ export class ReferenceManager extends Component {
 
         this.ticTacToeMenuInstance.Init(this);
 
-        this.ticTacToeManagerInstance = TicTacToeManager.instance;
         this.ticTacToeManagerInstance.Init(this);
+
+        this.ticTacToeSpawnerInstance.Init(this);
     }
 
     start() {
@@ -52,6 +58,7 @@ export class ReferenceManager extends Component {
         }
 
         console.info("Registered Button");
+        //ticTacToeButton.RegisterSelfButton(this.TicTacToeButtonInstances);
         this.ticTacToeButtonInstances.push(ticTacToeButton);
         ticTacToeButton.Init(this);
     }
@@ -71,5 +78,13 @@ export class ReferenceManager extends Component {
 
     get TicTacToeButtonInstances(){
         return this.ticTacToeButtonInstances;
+    }
+
+    get TicTacToeManagerInstance(){
+        return this.ticTacToeManagerInstance;
+    }
+
+    get TicTacToeSpawnerInstance(){
+        return this.ticTacToeSpawnerInstance
     }
 }

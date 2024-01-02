@@ -1,12 +1,12 @@
-import { _decorator, Component, Label, lerp, Node, Slider ,EventTarget } from 'cc';
+import { _decorator, Component, Label, lerp, Node, Slider, Input, input } from 'cc';
 import { BoardSettingMenu } from './BoardSettingMenu';
 
 const { ccclass, property } = _decorator;
 
 //const eventTarget = new EventTarget();
 
-@ccclass('MatchCountSliderSingleUI')
-export class MatchCountSliderSingleUI extends Component {
+@ccclass('BoardMatchCountSliderSingleUI')
+export class BoardMatchCountSliderSingleUI extends Component {
     @property(Slider)
     matchCountSlider : Slider;
 
@@ -15,6 +15,9 @@ export class MatchCountSliderSingleUI extends Component {
 
     @property(Label)
     maxLabel : Label;
+    
+    @property(Label)
+    selectedMatchCountLabel : Label;
 
     @property(Node)
     matchCountOptionBlocker : Node;
@@ -22,24 +25,29 @@ export class MatchCountSliderSingleUI extends Component {
     @property(BoardSettingMenu)
     boardSettingMenu : BoardSettingMenu;
 
+
     private inputMatchCount = 3;
     public minMatchCount = 0;
     public maxMatchCount = 0;
+    //private isSlideBeingUse = false;
 
     protected onLoad(): void {
         console.info("Subscribe to slider eveet");
         
         
-        const sliderEventHandler = new MatchCountSliderSingleUI.EventHandler();
+        const onSliderSlideEventHandler = new BoardMatchCountSliderSingleUI.EventHandler();
         // This Node is the node to which your event processing script component belongs
-        sliderEventHandler.target = this.node;
+        onSliderSlideEventHandler.target = this.node;
         // This is the script class name
-        sliderEventHandler.component = 'MatchCountSliderSingleUI';
-        sliderEventHandler.handler = 'OnSlide';
+        onSliderSlideEventHandler.component = 'BoardMatchCountSliderSingleUI'
+        //sliderEventHandler.component = this.name;
+        onSliderSlideEventHandler.handler = 'OnSlide';
+        //sliderEventHandler.handler = this.OnSlide.name;
+
+        this.matchCountSlider.slideEvents.push(onSliderSlideEventHandler);
         
-        //this.matchCountSlider.node.on('slide', this.onSlide, this);
-        
-        this.matchCountSlider!.slideEvents.push(sliderEventHandler);
+        //input.on(Input.EventType.MOUSE_UP, this.OnSlideEnd,this);
+        //this.matchCountSlider.node.on(Input.EventType.MOUSE_UP, this.OnSlideEnd,this);
     }
 
     start() {   
@@ -56,8 +64,10 @@ export class MatchCountSliderSingleUI extends Component {
             this.Hide();
             this.minMatchCount = 0;
             this.maxMatchCount = 0;
-            this.inputMatchCount = 3;
+            //this.inputMatchCount = 3;
         })
+
+        this.selectedMatchCountLabel.string = this.inputMatchCount.toString();
         this.Hide();
     }
 
@@ -69,7 +79,7 @@ export class MatchCountSliderSingleUI extends Component {
         this.maxMatchCount = maxValue;
 
         this.matchCountSlider.progress = 0;
-        this.inputMatchCount = 3;
+        //this.inputMatchCount = 3;
     }
 
     Show(){
@@ -92,14 +102,19 @@ export class MatchCountSliderSingleUI extends Component {
         progress = Math.round(progress * numOfOption) / numOfOption;
         // Set the progress of the slider to 0, 0.5, or 1
         slider.progress = progress;
-        // Do something with the progress value
-        this.CalculateMatchCount(progress);
+
+        this.CalculateMatchCount(this.matchCountSlider.progress);
+
+        this.selectedMatchCountLabel.string = this.inputMatchCount.toString();
+
         this.boardSettingMenu.MatchCountSetting = this.inputMatchCount;
+
+        console.info("Set Match Count into : " + this.inputMatchCount);
     }
 
     private CalculateMatchCount(progress : number){
         this.inputMatchCount = Math.round(lerp(this.minMatchCount,this.maxMatchCount,progress));
-        console.info("Current Progress : " + progress + ", convert to match Count : " + this.inputMatchCount);
+        //console.info("Current Progress : " + progress + ", convert to match Count : " + this.inputMatchCount);
     }
 }
 

@@ -1,7 +1,5 @@
 import { _decorator, Button, Component, EditBox, Label, Node ,EventHandler, CCInteger, Vec2, EventTarget, macro } from 'cc';
-import { TicTacToeManager } from './TicTacToeManager';
-import { TicTacToeSpawner } from './TicTacToeSpawner';
-import { ReferenceManager } from './ReferenceManager';
+import { ReferenceManager } from './ReferenceManager';;
 const { ccclass, property } = _decorator;
 
 //const eventTarget = new EventTarget();
@@ -12,7 +10,6 @@ export class BoardSettingMenu extends Component {
 
     @property(Label)
     yInputUI : Label;
-
     @property(Label)
     errorMessageLabel : Label;
 
@@ -31,7 +28,7 @@ export class BoardSettingMenu extends Component {
     @property(CCInteger)
     maxSize = 6;
 
-    private boardSizeSetting : number;
+    private boardSizeSetting : number = 0;
     private matchCountSetting : number = 0;
     
     private isXValueValid : boolean = false;
@@ -72,14 +69,14 @@ export class BoardSettingMenu extends Component {
             var xValue = this.boardSizeSetting;
 
             //TicTacToeManager : Handle the checking logic, reset
-            TicTacToeManager.instance.ResetBoardValues(new Vec2(xValue,xValue),this.matchCountSetting);
+            this.referenceManagerInstance.TicTacToeManagerInstance.ResetBoardValues(new Vec2(xValue,xValue),this.matchCountSetting);
             console.log("Reset Match count into : " + this.matchCountSetting);
 
             //Reset Some logic that only use for BoardSettingMenu
             this.ResetBoardSetting();
 
             //Update Graphics
-            TicTacToeSpawner.Instance.SpwanTicTacToeBoard(new Vec2(xValue,xValue));
+            this.referenceManagerInstance.TicTacToeSpawnerInstance.SpwanTicTacToeBoard(new Vec2(xValue,xValue));
             this.Hide();
         }
         else

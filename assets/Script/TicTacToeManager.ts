@@ -1,5 +1,4 @@
 import { _decorator, Color, Component, EventTarget, randomRangeInt, Vec2 } from 'cc';
-import { TicTacToeSpawner } from './TicTacToeSpawner';
 import { ReferenceManager } from './ReferenceManager';
 const { ccclass, property } = _decorator;
 
@@ -35,7 +34,7 @@ export class TicTacToeManager extends Component {
     //2. Check Answer once submit.
     //3. Reset Feature.
     //4. Trigger Winning Feedback.
-    public static instance : TicTacToeManager;
+    //public static instance : TicTacToeManager;
     private referenceManagerInstance : ReferenceManager = null;
 
     @property([Player])
@@ -59,13 +58,13 @@ export class TicTacToeManager extends Component {
     }
     
     protected onLoad(): void {
-        if(TicTacToeManager.instance !=null && TicTacToeManager.instance != this)
-        {
-            this.node.destroy()
-        }else
-        {
-            TicTacToeManager.instance = this;
-        }
+        // if(TicTacToeManager.instance !=null && TicTacToeManager.instance != this)
+        // {
+        //     this.node.destroy()
+        // }else
+        // {
+        //     TicTacToeManager.instance = this;
+        // }
     }
 
     start() {
@@ -73,7 +72,7 @@ export class TicTacToeManager extends Component {
         this.boardSize.x = 3;
         this.boardSize.y = 3;
         this.ResetBoardValues(this.boardSize, this.matchCount);
-        TicTacToeSpawner.Instance.SpwanTicTacToeBoard(this.boardSize);
+        this.referenceManagerInstance.TicTacToeSpawnerInstance.SpwanTicTacToeBoard(this.boardSize);
 
         var ticTacToeMenu = this.referenceManagerInstance.TicTacToeMenuInstance;
         ticTacToeMenu.eventTarget.on(ticTacToeMenu.OnPlayerSurrender,this.TicTacToeMenu_OnPlayerSurrender, this);
@@ -169,8 +168,8 @@ export class TicTacToeManager extends Component {
     //Private Method (Optimize It, DO Calculation at once)
     private CheckAnswer(playerIndex : number, selectedBoardIndex : number) : ResultType
     {
-        console.info("Receive Click, Checking Answer");
-        console.log("Board Size : " + this.boardSize.x, + "," +  this.boardSize.y);
+        //console.info("Receive Click, Checking Answer");
+       // console.log("Board Size : " + this.boardSize.x + "," +  this.boardSize.y);
 
         const BOARD_WIDTH =  this.boardSize.y;
         const currentRows = Math.floor(selectedBoardIndex/BOARD_WIDTH);

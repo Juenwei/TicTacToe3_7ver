@@ -1,8 +1,8 @@
 import { _decorator, Button, Component, Node, RichText } from 'cc';
 const { ccclass, property } = _decorator;
 
-@ccclass('WinSingleUI')
-export class WinSingleUI extends Component {
+@ccclass('WinSplashSingleUI')
+export class WinSplashSingleUI extends Component {
     
     @property(RichText)
     winMessageText : RichText;
